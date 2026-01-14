@@ -7,6 +7,7 @@ public class Storage : MonoBehaviour, IResourceReceiver
     private Dictionary<ResourceType, int> _inventory = new Dictionary<ResourceType, int>();
 
     public event Action<ResourceType, int> ResourceCountChanged;
+
     public void AcceptResource(ResourceType type, int amount = 1)
     {
         if (!_inventory.ContainsKey(type))

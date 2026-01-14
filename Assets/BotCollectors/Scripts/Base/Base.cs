@@ -23,13 +23,17 @@ public class Base : MonoBehaviour
         _workers.WorkerDeactivated += UnsubscribeWorker;
 
         if (_worker != null)
+        {
             _worker.ResourceDelivered += HandleResourceDelivered;
+        }
     }
 
     private void OnDisable()
     {
         if (_worker != null)
+        {
             _worker.ResourceDelivered -= HandleResourceDelivered;
+        }
     }
 
     private void Start()
