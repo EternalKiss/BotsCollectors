@@ -43,15 +43,10 @@ public class Base : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            ExecuteScun();
-        }
-
         TryAssignPendingTasks();
     }
 
-    private void ExecuteScun()
+    public void ExecuteScun()
     {
         List<ResourceItem> found = _scun.Research(transform.position);
 

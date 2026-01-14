@@ -100,6 +100,15 @@ public partial class @UserInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Scun"",
+                    ""type"": ""Button"",
+                    ""id"": ""f6fa6b08-cf85-40c2-8c0f-66f0b763ff93"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -157,6 +166,17 @@ public partial class @UserInput: IInputActionCollection2, IDisposable
                     ""action"": ""CameraMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""72418290-a4c6-4ebe-9b99-a83ff76a4fa3"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";MouseKeyboard"",
+                    ""action"": ""Scun"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -183,6 +203,7 @@ public partial class @UserInput: IInputActionCollection2, IDisposable
         // Game
         m_Game = asset.FindActionMap("Game", throwIfNotFound: true);
         m_Game_CameraMove = m_Game.FindAction("CameraMove", throwIfNotFound: true);
+        m_Game_Scun = m_Game.FindAction("Scun", throwIfNotFound: true);
     }
 
     ~@UserInput()
@@ -264,6 +285,7 @@ public partial class @UserInput: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Game;
     private List<IGameActions> m_GameActionsCallbackInterfaces = new List<IGameActions>();
     private readonly InputAction m_Game_CameraMove;
+    private readonly InputAction m_Game_Scun;
     /// <summary>
     /// Provides access to input actions defined in input action map "Game".
     /// </summary>
@@ -279,6 +301,10 @@ public partial class @UserInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Game/CameraMove".
         /// </summary>
         public InputAction @CameraMove => m_Wrapper.m_Game_CameraMove;
+        /// <summary>
+        /// Provides access to the underlying input action "Game/Scun".
+        /// </summary>
+        public InputAction @Scun => m_Wrapper.m_Game_Scun;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -308,6 +334,9 @@ public partial class @UserInput: IInputActionCollection2, IDisposable
             @CameraMove.started += instance.OnCameraMove;
             @CameraMove.performed += instance.OnCameraMove;
             @CameraMove.canceled += instance.OnCameraMove;
+            @Scun.started += instance.OnScun;
+            @Scun.performed += instance.OnScun;
+            @Scun.canceled += instance.OnScun;
         }
 
         /// <summary>
@@ -322,6 +351,9 @@ public partial class @UserInput: IInputActionCollection2, IDisposable
             @CameraMove.started -= instance.OnCameraMove;
             @CameraMove.performed -= instance.OnCameraMove;
             @CameraMove.canceled -= instance.OnCameraMove;
+            @Scun.started -= instance.OnScun;
+            @Scun.performed -= instance.OnScun;
+            @Scun.canceled -= instance.OnScun;
         }
 
         /// <summary>
@@ -382,5 +414,12 @@ public partial class @UserInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCameraMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Scun" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnScun(InputAction.CallbackContext context);
     }
 }
