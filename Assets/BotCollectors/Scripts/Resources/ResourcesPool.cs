@@ -1,10 +1,9 @@
-using Mono.Cecil;
 using System.Collections;
 using UnityEngine;
 
 public class ResourcesPool : GenericPool<ResourceItem>
 {
-    private ResourceType[] _resourceTypes = (ResourceType[])System.Enum.GetValues(typeof(ResourceType));
+    [SerializeField] private ResourceType _resourcesTypes;
 
     private float _minXSpawn = 150f;
     private float _maxXSpawn = 200f;
@@ -30,7 +29,7 @@ public class ResourcesPool : GenericPool<ResourceItem>
     protected override void ActionOnGet(ResourceItem resource)
     {
         resource.transform.position = GetRandomSpawnPosition();
-        resource.Type = _resourceTypes[Random.Range(0, _resourceTypes.Length)];
+        resource.GetRandomType();
 
         base.ActionOnGet(resource);
     }

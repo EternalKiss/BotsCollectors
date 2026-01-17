@@ -3,30 +3,28 @@ using UnityEngine;
 
 public class ResourceRegistry : MonoBehaviour
 {
-    [SerializeField] private Scunner _scunner;
+    private readonly List<ResourceItem> _freeResources = new List<ResourceItem>();
+    private readonly List<ResourceItem> _busyResources = new List<ResourceItem>();
 
-    public List<ResourceItem> FreeResources { get; private set; } = new List<ResourceItem>();
-    public List<ResourceItem> BusyResources { get; private set; } = new List<ResourceItem>();
+    public IReadOnlyList<ResourceItem> FreeResources => _freeResources;
+    public IReadOnlyList<ResourceItem> BusyResources => _busyResources;
 
     public void AddNewResource(ResourceItem resource)
     {
-        if (!FreeResources.Contains(resource) && !BusyResources.Contains(resource))
-            FreeResources.Add(resource);
+        if (!_freeResources.Contains(resource) && !_busyResources.Contains(resource))
+            _freeResources.Add(resource);
     }
 
     public void SetBusy(ResourceItem resource)
     {
-        if (FreeResources.Contains(resource))
+        if (_freeResources.Remove(resource))
         {
-            FreeResources.Remove(resource);
-            BusyResources.Add(resource);
-
-            resource.IsTargeted = true;
+            _busyResources.Add(resource);
         }
     }
 
     public void RemoveDeliveredResource(ResourceItem resource)
     {
-        BusyResources.Remove(resource);
+        _busyResources.Remove(resource);
     }
 }

@@ -42,7 +42,7 @@ public class Worker : MonoBehaviour
             yield break;
         }
 
-        yield return _miner.MiningRoutine(resource, _hands, IsBusy);
+        yield return _miner.MiningRoutine(resource, _hands);
 
         _agent.stoppingDistance = 3.0f;
 

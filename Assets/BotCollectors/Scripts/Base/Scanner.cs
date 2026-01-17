@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Scunner : MonoBehaviour
+public class Scanner : MonoBehaviour
 {
     [SerializeField] private ResourceRegistry _resourcesManager;
     [SerializeField] private LayerMask _scanMask;
@@ -19,11 +19,8 @@ public class Scunner : MonoBehaviour
         {
             if (_results[i].TryGetComponent<ResourceItem>(out ResourceItem resource))
             {
-                if (resource.IsTargeted == false)
-                {
-                    freeResources.Add(resource);
-                    _resourcesManager.AddNewResource(resource);
-                }
+                freeResources.Add(resource);
+                _resourcesManager.AddNewResource(resource);
             }
 
             _results[i] = null;

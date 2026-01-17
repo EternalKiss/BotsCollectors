@@ -12,7 +12,7 @@ public class Miner : MonoBehaviour
         _collectionWait = new WaitForSeconds(_collectionTime);
     }
 
-    public IEnumerator MiningRoutine(Transform resource, CarryPoint hands, bool isBusy)
+    public IEnumerator MiningRoutine(Transform resource, CarryPoint hands)
     {
         yield return _collectionWait;
 
@@ -23,7 +23,6 @@ public class Miner : MonoBehaviour
         }
         else
         {
-            isBusy = false;
             yield break;
         }
 

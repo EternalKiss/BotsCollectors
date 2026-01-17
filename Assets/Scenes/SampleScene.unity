@@ -830,6 +830,7 @@ GameObject:
   - component: {fileID: 462241320}
   - component: {fileID: 462241319}
   - component: {fileID: 462241322}
+  - component: {fileID: 462241323}
   m_Layer: 0
   m_Name: Base
   m_TagString: Untagged
@@ -960,6 +961,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fb35026a6e84b24ab408a45b406c1ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Scunner
+  _resourcesManager: {fileID: 462241323}
   _scanMask:
     serializedVersion: 2
     m_Bits: 64
@@ -976,8 +978,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Base
   _worker: {fileID: -6308340204348874902, guid: 1998a2a250614e14a9e23a2aab000695, type: 3}
-  _storage: {fileID: 1052690141}
   _spawnPoint: {fileID: 501812004}
+  _storage: {fileID: 1052690141}
 --- !u!114 &462241322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -991,6 +993,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UserInputReader
   _base: {fileID: 462241321}
+--- !u!114 &462241323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 462241314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0381577dd1176444f9933b213a68c320, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourcesManager
+  _scunner: {fileID: 462241320}
 --- !u!1 &501812003
 GameObject:
   m_ObjectHideFlags: 0

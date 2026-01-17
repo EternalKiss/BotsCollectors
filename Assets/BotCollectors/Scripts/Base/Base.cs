@@ -8,7 +8,7 @@ public class Base : MonoBehaviour
     [SerializeField] private Storage _storage;
 
     private ResourceRegistry _resourcesManager;
-    private Scunner _scun;
+    private Scanner _scun;
 
     private List<Worker> _activeWorkers = new List<Worker>();
     private float _workersAmount = 3;
@@ -16,7 +16,7 @@ public class Base : MonoBehaviour
     private void Awake()
     {
         _resourcesManager = GetComponent<ResourceRegistry>();
-        _scun = GetComponent<Scunner>();
+        _scun = GetComponent<Scanner>();
     }
 
     private void Start()
@@ -64,7 +64,7 @@ public class Base : MonoBehaviour
 
     private void HandleResourceDelivered(ResourceItem resource)
     {
-        _storage.AcceptResource(resource.Type);
+        _storage.AcceptResource(resource.GetResourceType());
         _resourcesManager.RemoveDeliveredResource(resource);
         Destroy(resource.gameObject);
     }
