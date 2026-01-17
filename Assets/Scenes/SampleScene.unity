@@ -976,8 +976,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Base
   _worker: {fileID: -6308340204348874902, guid: 1998a2a250614e14a9e23a2aab000695, type: 3}
-  _workers: {fileID: 462241319}
   _storage: {fileID: 1052690141}
+  _spawnPoint: {fileID: 501812004}
 --- !u!114 &462241322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -990,6 +990,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23245e02c0c3af8489f5e65c5e3e584c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UserInputReader
+  _base: {fileID: 462241321}
 --- !u!1 &501812003
 GameObject:
   m_ObjectHideFlags: 0
@@ -1050,7 +1051,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ef1287e4b5178f4fbff4a762560926d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourcesPool
-  _prefab: {fileID: 1418075034718842286, guid: 8221de0a002665648876924eada479bb, type: 3}
+  _prefab: {fileID: 7663353487305203113, guid: 8221de0a002665648876924eada479bb, type: 3}
   _poolCapacity: 5
   _poolMaxSize: 5
 --- !u!4 &540326359

@@ -32,6 +32,6 @@ public class UserInputReader : MonoBehaviour
 
     private void OnScunPerformed(InputAction.CallbackContext context)
     {
-        _base.ExecuteScun();
+        _base.Scun();
     }
 }

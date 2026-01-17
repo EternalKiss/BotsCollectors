@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+public class CameraMover : MonoBehaviour
 {
     [SerializeField] private Camera _camera;
     [SerializeField] private UserInputReader _reader;
 
     private float _speed = 20f;
 
-    private void Update()
+    private void LateUpdate()
     {
         Move();
     }

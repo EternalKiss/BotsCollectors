@@ -1,4 +1,3 @@
-using DG.Tweening;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -10,14 +9,13 @@ public class Worker : MonoBehaviour
     [SerializeField] private Vector3 _basePosition;
     [SerializeField] private CarryPoint _hands;
     [SerializeField] private ResourceType _carryingType;
+    [SerializeField] private Miner _miner;
 
     private NavMeshAgent _agent;
 
-    private float _collectionTime = 2.0f;
-
     public bool IsBusy { get; private set; } = false;
 
-    public event Action<ResourceType> ResourceDelivered;
+    public event Action<ResourceItem> ResourceDelivered;
 
     private void Awake()
     {
@@ -26,10 +24,10 @@ public class Worker : MonoBehaviour
 
     public void Move(Transform resource)
     {
-        if (!IsBusy) StartCoroutine(MiningRoutine(resource));
+        if (!IsBusy) StartCoroutine(CollectRoutine(resource));
     }
 
-    private IEnumerator MiningRoutine(Transform resource)
+    private IEnumerator CollectRoutine(Transform resource)
     {
         if (resource == null) yield break;
 
@@ -44,32 +42,17 @@ public class Worker : MonoBehaviour
             yield break;
         }
 
-        yield return new WaitForSeconds(_collectionTime);
-
-        if (resource != null)
-        {
-            resource.SetParent(_hands.transform);
-            resource.DOLocalMove(Vector3.zero, 0.3f);
-        }
-        else
-        {
-            IsBusy = false;
-            yield break;
-        }
-
-        resource.SetParent(_hands.transform);
-        resource.DOLocalMove(Vector3.zero, 0.3f);
+        yield return _miner.MiningRoutine(resource, _hands, IsBusy);
 
         _agent.stoppingDistance = 3.0f;
 
         yield return _mover.MoveToTarget(_basePosition);
 
-        if (resource.TryGetComponent<ResourceItem>(out ResourceItem item))
+        if (resource != null && resource.TryGetComponent<ResourceItem>(out ResourceItem item))
         {
-            ResourceDelivered?.Invoke(item.Type);
+            ResourceDelivered?.Invoke(item);
         }
 
-        Destroy(resource.gameObject);
         IsBusy = false;
     }
 }

@@ -4,36 +4,19 @@ using System.Collections.Generic;
 public class Base : MonoBehaviour
 {
     [SerializeField] private Worker _worker;
-    [SerializeField] private WorkerPool _workers;
+    [SerializeField] private Transform _spawnPoint;
     [SerializeField] private Storage _storage;
 
+    private ResourceRegistry _resourcesManager;
     private Scunner _scun;
-    private List<ResourceItem> _pendingResources = new List<ResourceItem>();
+
+    private List<Worker> _activeWorkers = new List<Worker>();
     private float _workersAmount = 3;
 
     private void Awake()
     {
+        _resourcesManager = GetComponent<ResourceRegistry>();
         _scun = GetComponent<Scunner>();
-        _workers = GetComponent<WorkerPool>();
-    }
-
-    private void OnEnable()
-    {
-        _workers.WorkerActivated += SubscribeWorker;
-        _workers.WorkerDeactivated += UnsubscribeWorker;
-
-        if (_worker != null)
-        {
-            _worker.ResourceDelivered += HandleResourceDelivered;
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (_worker != null)
-        {
-            _worker.ResourceDelivered -= HandleResourceDelivered;
-        }
     }
 
     private void Start()
@@ -46,58 +29,54 @@ public class Base : MonoBehaviour
         TryAssignPendingTasks();
     }
 
-    public void ExecuteScun()
+    private void TryAssignPendingTasks()
     {
-        List<ResourceItem> found = _scun.Research(transform.position);
+        if (_resourcesManager.FreeResources.Count == 0) return;
 
-        foreach (var resources in found)
+        foreach (var worker in _activeWorkers)
         {
-            resources.IsTargeted = true;
-            _pendingResources.Add(resources);
+            if (worker.IsBusy == false && _resourcesManager.FreeResources.Count > 0)
+            {
+                ResourceItem target = _resourcesManager.FreeResources[0];
+
+                _resourcesManager.SetBusy(target);
+
+                worker.Move(target.transform);
+            }
         }
     }
 
-    private void TryAssignPendingTasks()
+    public void Scun()
     {
-        if (_pendingResources.Count == 0) return;
-
-        var workers = _workers.ActiveWorkers;
-
-        foreach (var worker in workers)
-        {
-            if (worker.IsBusy == false && _pendingResources.Count > 0)
-            {
-                ResourceItem target = _pendingResources[0];
-                _pendingResources.RemoveAt(0);
-
-                if (target != null)
-                {
-                    worker.Move(target.transform);
-                }
-            }
-        }
+        _scun?.Research(transform.position);
     }
 
     private void GetWorkers()
     {
         for (int i = 0; i < _workersAmount; i++)
         {
-            _workers.Get();
+            Worker newWorker = Instantiate(_worker, _spawnPoint.position, Quaternion.identity);
+            _activeWorkers.Add(newWorker);
+
+            newWorker.ResourceDelivered += HandleResourceDelivered;
         }
     }
 
-    private void HandleResourceDelivered(ResourceType type)
+    private void HandleResourceDelivered(ResourceItem resource)
     {
-        _storage.AcceptResource(type);
+        _storage.AcceptResource(resource.Type);
+        _resourcesManager.RemoveDeliveredResource(resource);
+        Destroy(resource.gameObject);
     }
 
-    private void SubscribeWorker(Worker worker)
+    private void OnDestroy()
     {
-        worker.ResourceDelivered += HandleResourceDelivered;
-    }
-
-    private void UnsubscribeWorker(Worker worker)
-    {
-        worker.ResourceDelivered -= HandleResourceDelivered;
+        foreach (var worker in _activeWorkers)
+        {
+            if (worker != null)
+            {
+                worker.ResourceDelivered -= HandleResourceDelivered;
+            }
+        }
     }
 }
