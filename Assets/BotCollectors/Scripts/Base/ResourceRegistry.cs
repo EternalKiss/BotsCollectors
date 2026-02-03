@@ -12,7 +12,9 @@ public class ResourceRegistry : MonoBehaviour
     public void AddNewResource(ResourceItem resource)
     {
         if (!_freeResources.Contains(resource) && !_busyResources.Contains(resource))
+        {
             _freeResources.Add(resource);
+        }
     }
 
     public void SetBusy(ResourceItem resource)

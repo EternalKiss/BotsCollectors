@@ -3,12 +3,14 @@ using UnityEngine;
 
 public class CounterUI : MonoBehaviour
 {
-    [SerializeField] private Storage _storage;
-
+    private Storage _storage;
     private Dictionary<ResourceType, ResourcesRowUI> _rows = new Dictionary<ResourceType, ResourcesRowUI>();
 
-    private void Awake()
+    public void Initialize(Storage storage)
     {
+        _storage = storage;
+        _storage.ResourceCountChanged += OnResourceChanged;
+
         var childRows = GetComponentsInChildren<ResourcesRowUI>();
 
         foreach (var row in childRows)
@@ -17,15 +19,11 @@ public class CounterUI : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    public void SetPosition(Vector3 position, Vector3 offset)
     {
-        _storage.ResourceCountChanged += OnResourceChanged;
+        transform.position = position + offset;
     }
 
-    private void OnDisable()
-    {
-        _storage.ResourceCountChanged -= OnResourceChanged;
-    }
 
     private void OnResourceChanged(ResourceType type, int totalAmount)
     {
@@ -33,5 +31,11 @@ public class CounterUI : MonoBehaviour
         {
             row.UpdateText(totalAmount);
         }
+    }
+
+    private void OnDestroy()
+    {
+        if (_storage != null)
+            _storage.ResourceCountChanged -= OnResourceChanged;
     }
 }

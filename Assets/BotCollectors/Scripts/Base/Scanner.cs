@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +12,8 @@ public class Scanner : MonoBehaviour
 
     public List<ResourceItem> Research(Vector3 baseTransform)
     {
+        Array.Clear(_results, 0, _results.Length);
+
         int amount = Physics.OverlapBoxNonAlloc(baseTransform, _radius, _results, Quaternion.identity, _scanMask);
 
         List<ResourceItem> freeResources = new List<ResourceItem>();

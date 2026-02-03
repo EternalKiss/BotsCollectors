@@ -188,7 +188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Worker
   _mover: {fileID: -2371717140805810856}
-  _basePosition: {x: 154, y: 1, z: 159}
+  _base: {fileID: 0}
   _hands: {fileID: 5072922065593516842}
   _carryingType: 0
   _miner: {fileID: 2748224878232128089}
@@ -265,7 +265,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 5
+  m_Speed: 6
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120

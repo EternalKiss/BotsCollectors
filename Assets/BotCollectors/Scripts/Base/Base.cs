@@ -1,32 +1,101 @@
-using UnityEngine;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class Base : MonoBehaviour
+public class Base : MonoBehaviour, IFlagTarget
 {
     [SerializeField] private Worker _worker;
     [SerializeField] private Transform _spawnPoint;
     [SerializeField] private Storage _storage;
+    [SerializeField] private Flag _flagPrefab;
+    [SerializeField] private Scanner _scan;
+    [SerializeField] private ResourceRegistry _resourcesManager;
+    [SerializeField] private CounterUI _uiCounter;
 
-    private ResourceRegistry _resourcesManager;
-    private Scanner _scun;
+    private Flag _currentFlag;
 
     private List<Worker> _activeWorkers = new List<Worker>();
-    private float _workersAmount = 3;
+    private float _startWorkersAmount = 3;
 
-    private void Awake()
-    {
-        _resourcesManager = GetComponent<ResourceRegistry>();
-        _scun = GetComponent<Scanner>();
-    }
+    private bool _canGetWorkers = true;
+
+    public event Action<Transform, Worker> BuildingBase;
 
     private void Start()
     {
-        GetWorkers();
+        if (_canGetWorkers)
+        {
+            GetWorkersOnStart();
+        }
+
+        CounterUI uiInstance = Instantiate(_uiCounter);
+
+        uiInstance.Initialize(_storage);
+
+        uiInstance.SetPosition(this.transform.position, new Vector3(0, 11f, 0));
     }
 
     private void Update()
     {
         TryAssignPendingTasks();
+    }
+
+    private void OnEnable()
+    {
+        _storage.ReachedResourcesForWorker += NewWorker;
+        _storage.ReachedResourcesForBase += SendWorkerBuildingBase;
+    }
+
+    private void OnDisable()
+    {
+        _storage.ReachedResourcesForWorker -= NewWorker;
+        _storage.ReachedResourcesForBase -= SendWorkerBuildingBase;
+    }
+
+    public void SetStorage(Storage storage)
+    {
+        _storage = storage;
+    }
+
+    public void Scan()
+    {
+        _scan?.Research(transform.position);
+    }
+
+    public void SetFlag(Vector3 position)
+    {
+        if (_currentFlag == null)
+        {
+            _currentFlag = Instantiate(_flagPrefab);
+        }
+
+        _currentFlag.transform.position = position;
+    }
+
+    public Vector3 GetDropOffPoint()
+    {
+        return _storage != null ? _storage.transform.position : transform.position;
+    }
+
+    public void InitializeFromBuilder(Scanner scanner, bool canSpawnWorkers)
+    {
+        _canGetWorkers = canSpawnWorkers;
+        _scan = scanner;
+
+        _storage.ReachedResourcesForWorker += NewWorker;
+        _storage.ReachedResourcesForBase += SendWorkerBuildingBase;
+
+        _resourcesManager = _scan.GetComponent<ResourceRegistry>();
+    }
+
+    public void AddWorkerManually(Worker worker)
+    {
+        if (!_activeWorkers.Contains(worker))
+        {
+            _activeWorkers.Add(worker);
+            worker.ResourceDelivered += HandleResourceDelivered;
+            worker.FlagReached += WorkerArrived;
+        }
     }
 
     private void TryAssignPendingTasks()
@@ -46,19 +115,51 @@ public class Base : MonoBehaviour
         }
     }
 
-    public void Scun()
+    private void SendWorkerBuildingBase()
     {
-        _scun?.Research(transform.position);
+        if (_currentFlag == null) return;
+        
+        if(_activeWorkers.Count <= 1) return;
+
+        Worker freeWorker = _activeWorkers.Find(w => !w.IsBusy);
+
+        if (freeWorker != null)
+        {
+            _storage.SpendResources(ResourcesForObject.BaseCost);
+
+            freeWorker.MoveToBuildBase(_currentFlag.transform);
+        }
     }
 
-    private void GetWorkers()
+    private void WorkerArrived(Transform basePosition, Worker worker)
     {
-        for (int i = 0; i < _workersAmount; i++)
+        BuildingBase?.Invoke(basePosition, worker);
+        _activeWorkers.Remove(worker);
+
+        Destroy(_currentFlag.gameObject);
+        _currentFlag = null;
+    }
+
+    private void GetWorkersOnStart()
+    {
+        for (int i = 0; i < _startWorkersAmount; i++)
+        {
+            NewWorker();
+        }
+    }
+
+    private void NewWorker()
+    {
+        if (_currentFlag == null)
         {
             Worker newWorker = Instantiate(_worker, _spawnPoint.position, Quaternion.identity);
             _activeWorkers.Add(newWorker);
 
             newWorker.ResourceDelivered += HandleResourceDelivered;
+            newWorker.FlagReached += WorkerArrived;
+            newWorker.SetBase(this);
+
+            _storage.SpendResources(ResourcesForObject.WorkerCost);
         }
     }
 
@@ -76,6 +177,7 @@ public class Base : MonoBehaviour
             if (worker != null)
             {
                 worker.ResourceDelivered -= HandleResourceDelivered;
+                _worker.FlagReached -= WorkerArrived;
             }
         }
     }

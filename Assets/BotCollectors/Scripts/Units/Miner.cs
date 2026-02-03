@@ -19,7 +19,7 @@ public class Miner : MonoBehaviour
         if (resource != null)
         {
             resource.SetParent(hands.transform);
-            resource.DOLocalMove(Vector3.zero, 0.3f);
+            resource.DOLocalMove(Vector3.zero, 0.3f).WaitForCompletion();
         }
         else
         {

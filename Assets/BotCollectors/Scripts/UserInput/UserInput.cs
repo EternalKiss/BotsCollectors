@@ -109,6 +109,15 @@ public partial class @UserInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Mouse"",
+                    ""type"": ""Button"",
+                    ""id"": ""614a2ae0-b620-49c5-bd51-5474be549d56"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -177,6 +186,17 @@ public partial class @UserInput: IInputActionCollection2, IDisposable
                     ""action"": ""Scun"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2b403815-7b9b-4491-afb7-4b7713507932"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";MouseKeyboard"",
+                    ""action"": ""Mouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -204,6 +224,7 @@ public partial class @UserInput: IInputActionCollection2, IDisposable
         m_Game = asset.FindActionMap("Game", throwIfNotFound: true);
         m_Game_CameraMove = m_Game.FindAction("CameraMove", throwIfNotFound: true);
         m_Game_Scun = m_Game.FindAction("Scun", throwIfNotFound: true);
+        m_Game_Mouse = m_Game.FindAction("Mouse", throwIfNotFound: true);
     }
 
     ~@UserInput()
@@ -286,6 +307,7 @@ public partial class @UserInput: IInputActionCollection2, IDisposable
     private List<IGameActions> m_GameActionsCallbackInterfaces = new List<IGameActions>();
     private readonly InputAction m_Game_CameraMove;
     private readonly InputAction m_Game_Scun;
+    private readonly InputAction m_Game_Mouse;
     /// <summary>
     /// Provides access to input actions defined in input action map "Game".
     /// </summary>
@@ -305,6 +327,10 @@ public partial class @UserInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Game/Scun".
         /// </summary>
         public InputAction @Scun => m_Wrapper.m_Game_Scun;
+        /// <summary>
+        /// Provides access to the underlying input action "Game/Mouse".
+        /// </summary>
+        public InputAction @Mouse => m_Wrapper.m_Game_Mouse;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -337,6 +363,9 @@ public partial class @UserInput: IInputActionCollection2, IDisposable
             @Scun.started += instance.OnScun;
             @Scun.performed += instance.OnScun;
             @Scun.canceled += instance.OnScun;
+            @Mouse.started += instance.OnMouse;
+            @Mouse.performed += instance.OnMouse;
+            @Mouse.canceled += instance.OnMouse;
         }
 
         /// <summary>
@@ -354,6 +383,9 @@ public partial class @UserInput: IInputActionCollection2, IDisposable
             @Scun.started -= instance.OnScun;
             @Scun.performed -= instance.OnScun;
             @Scun.canceled -= instance.OnScun;
+            @Mouse.started -= instance.OnMouse;
+            @Mouse.performed -= instance.OnMouse;
+            @Mouse.canceled -= instance.OnMouse;
         }
 
         /// <summary>
@@ -421,5 +453,12 @@ public partial class @UserInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnScun(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Mouse" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMouse(InputAction.CallbackContext context);
     }
 }
