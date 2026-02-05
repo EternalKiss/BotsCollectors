@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Base : MonoBehaviour, IFlagTarget
@@ -13,6 +14,7 @@ public class Base : MonoBehaviour, IFlagTarget
     [SerializeField] private CounterUI _uiCounter;
 
     private Flag _currentFlag;
+    private FlagPlacer _flagPlacer;
 
     private List<Worker> _activeWorkers = new List<Worker>();
     private float _startWorkersAmount = 3;
@@ -20,6 +22,11 @@ public class Base : MonoBehaviour, IFlagTarget
     private bool _canGetWorkers = true;
 
     public event Action<Transform, Worker> BuildingBase;
+
+    private void Awake()
+    {
+        _flagPlacer = GetComponent<FlagPlacer>();
+    }
 
     private void Start()
     {
@@ -42,13 +49,13 @@ public class Base : MonoBehaviour, IFlagTarget
 
     private void OnEnable()
     {
-        _storage.ReachedResourcesForWorker += NewWorker;
+        _storage.ReachedResourcesForWorker += CreateWorker;
         _storage.ReachedResourcesForBase += SendWorkerBuildingBase;
     }
 
     private void OnDisable()
     {
-        _storage.ReachedResourcesForWorker -= NewWorker;
+        _storage.ReachedResourcesForWorker -= CreateWorker;
         _storage.ReachedResourcesForBase -= SendWorkerBuildingBase;
     }
 
@@ -66,10 +73,12 @@ public class Base : MonoBehaviour, IFlagTarget
     {
         if (_currentFlag == null)
         {
-            _currentFlag = Instantiate(_flagPrefab);
+            _currentFlag = _flagPlacer.CreateFlag(position);
         }
-
-        _currentFlag.transform.position = position;
+        else
+        {
+            _currentFlag.transform.position = position;
+        }
     }
 
     public Vector3 GetDropOffPoint()
@@ -82,7 +91,7 @@ public class Base : MonoBehaviour, IFlagTarget
         _canGetWorkers = canSpawnWorkers;
         _scan = scanner;
 
-        _storage.ReachedResourcesForWorker += NewWorker;
+        _storage.ReachedResourcesForWorker += CreateWorker;
         _storage.ReachedResourcesForBase += SendWorkerBuildingBase;
 
         _resourcesManager = _scan.GetComponent<ResourceRegistry>();
@@ -118,8 +127,8 @@ public class Base : MonoBehaviour, IFlagTarget
     private void SendWorkerBuildingBase()
     {
         if (_currentFlag == null) return;
-        
-        if(_activeWorkers.Count <= 1) return;
+
+        if (_activeWorkers.Count <= 1) return;
 
         Worker freeWorker = _activeWorkers.Find(w => !w.IsBusy);
 
@@ -144,11 +153,11 @@ public class Base : MonoBehaviour, IFlagTarget
     {
         for (int i = 0; i < _startWorkersAmount; i++)
         {
-            NewWorker();
+            CreateWorker();
         }
     }
 
-    private void NewWorker()
+    private void CreateWorker()
     {
         if (_currentFlag == null)
         {

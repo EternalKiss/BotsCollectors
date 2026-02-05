@@ -13,8 +13,7 @@ GameObject:
   - component: {fileID: 3201026886262347333}
   - component: {fileID: 7410645910953735771}
   - component: {fileID: 1773384518751791354}
-  - component: {fileID: 5628128145682691835}
-  - component: {fileID: 1677890486533603389}
+  - component: {fileID: -8779936256697553837}
   m_Layer: 3
   m_Name: Base
   m_TagString: Untagged
@@ -31,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 1885756497387934948}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 154.3735, y: 5, z: 159.26154}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -135,7 +134,7 @@ MonoBehaviour:
   _scan: {fileID: 4570292282686835599, guid: 3962ad139a30bba499cdcb001c957e36, type: 3}
   _resourcesManager: {fileID: 2091159020278050478, guid: 3962ad139a30bba499cdcb001c957e36, type: 3}
   _uiCounter: {fileID: 2861689702867291491, guid: ef3c6f33b7272ab4a81ceb40cd4c541a, type: 3}
---- !u!114 &5628128145682691835
+--- !u!114 &-8779936256697553837
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,29 +143,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1885756497387934948}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23245e02c0c3af8489f5e65c5e3e584c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UserInputReader
-  _base: {fileID: 1773384518751791354}
---- !u!114 &1677890486533603389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1885756497387934948}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21195e81c847e2044b8e29ead3c8d084, type: 3}
+  m_Script: {fileID: 11500000, guid: aa1e16a5546c31c4bb0e2e5145ec7064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlagPlacer
-  _inputReader: {fileID: 5628128145682691835}
-  _baseMask:
-    serializedVersion: 2
-    m_Bits: 8
-  _groundMask:
-    serializedVersion: 2
-    m_Bits: 128
+  _flagPrefab: {fileID: -5304769241342580290, guid: de4692ce29cd7274f9a3fa7d4cddcd5b, type: 3}
+  _offset: {x: 0, y: 5, z: 0}
 --- !u!1 &6175573411461714271
 GameObject:
   m_ObjectHideFlags: 0

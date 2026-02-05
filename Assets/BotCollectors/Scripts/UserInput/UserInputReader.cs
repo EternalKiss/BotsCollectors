@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class UserInputReader : MonoBehaviour
 {
-    [SerializeField] private Base _base;
+    [SerializeField] private BaseRegistry _baseRegistry;
 
     private UserInput _userInput;
 
@@ -37,9 +37,8 @@ public class UserInputReader : MonoBehaviour
 
     private void OnScunPerformed(InputAction.CallbackContext context)
     {
-        _base.Scan();
+        _baseRegistry.ScanAll();
     }
-
     private void OnMouseLeftButtonClick(InputAction.CallbackContext context)
     {
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());

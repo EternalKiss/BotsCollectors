@@ -67,7 +67,7 @@ public class Worker : MonoBehaviour
 
         yield return _miner.MiningRoutine(resource, _hands);
 
-        _agent.stoppingDistance = 5f;
+        _agent.stoppingDistance = 0.5f;
 
         yield return _mover.MoveToTarget(_base.GetDropOffPoint());
 
